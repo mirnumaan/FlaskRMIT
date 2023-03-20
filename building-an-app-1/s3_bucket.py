@@ -2,7 +2,7 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 
-bucket_name = 'mirbucket'
+bucket_name = 'myaws006'
 region = 'us-east-1'
 def create_bucket(bucket_name, region = region):
     """Create an S3 bucket in a specified region
