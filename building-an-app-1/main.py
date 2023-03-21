@@ -55,7 +55,7 @@ def authenticate():
 
     except Exception as e:
         print(e)
-        return redirect('/welcome')
+        return redirect('/login')
 
 # Dashboard route
 @app.route('/welcome')
