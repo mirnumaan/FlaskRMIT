@@ -72,59 +72,6 @@ def logout():
     return redirect('/login')
 
 
-
-
-############3 dynamo table #####################
-
-# response = dynamodb.create_table(
-#     AttributeDefinitions=[
-#         {
-#             'AttributeName': 'student_id',
-#             'AttributeType': 'N'
-#         },
-#         {
-#             'AttributeName': 'student_name',
-#             'AttributeType': 'S'
-#         },
-#         {
-#             'AttributeName': 'course_id',
-#             'AttributeType': 'S'
-#         }
-#     ],
-#     TableName='Rmit',
-#     KeySchema=[
-#         {
-#             'AttributeName': 'student_name',
-#             'KeyType': 'HASH'
-#         },
-#         {
-#             'AttributeName': 'student_id',
-#             'KeyType': 'RANGE'
-#         },
-#     ],
-#     LocalSecondaryIndexes=[
-#         {
-#             'IndexName': 'course_id',
-#             'KeySchema': [
-#                 {
-#                     'AttributeName': 'student_name',
-#                     'KeyType': 'HASH'
-#                 },
-#                 {
-#                     'AttributeName': 'course_id',
-#                     'KeyType': 'RANGE'
-#                 }
-#             ],
-#             'Projection': {
-#                 'ProjectionType': 'ALL'
-#             }
-#         },
-#     ],
-#     BillingMode='PAY_PER_REQUEST',
-
-# )
-########################
-
 # Run app
 if __name__ == '__main__':
 
