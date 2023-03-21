@@ -1,6 +1,6 @@
-from table import Movies
 from flask import Flask, render_template, request, redirect, session
 import boto3
+from table import Movies
  
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ access_key="ASIAR44X363U5N2K53VF"
 secret_key="QTFe3YejAiB+3IKtASnsbCWW2LRJ6szMV1HPOOhC"
 aws_session_token="FwoGZXIvYXdzEM///////////wEaDM+dqQAQc/h3MhlPHyLNAVz0nCbwldv+O7MuhzKMubVA470+ttrGLmfKhBPay2drmZH5bEijT0yGL/zslPKtLYV0ICgsQwVa5FtMxlKjlVZRyUS0V3y5ELJz3LsAvq8IpC+APSUFzXbYs7GPlaevBwhVb7Th1EN/DRjV5o7cvTED7/q64x6mkpWM2jSkBt1rZ++Qv5vB/R8ESl0/A5kPiFnHshyKx3P5npv9Tt/JnrSYj3V2Wt+4kUr9Sj11pImmQFnpNyl6zLrdVLWwhWcSrndL3YXKy8sWy2XNvp4okYzloAYyLRSQ6eawzuS6zqveuxBBC4ZIH8zvtojV7RSddcYTaj97jOyKFI6/RfN49JSlew=="
 region_name = 'us-east-1'
-table_name = 'login'
+
 
 # DynamoDB Client
 dynamodb = boto3.resource('dynamodb',
@@ -38,7 +38,7 @@ def authenticate():
     password = request.form['password']
 
     # DynamoDB Table
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table('login')
 
     try:
         # Retrieve user data from DynamoDB
@@ -66,10 +66,10 @@ def dashboard():
     
 
 # Logout route
-@app.route('/logout')
-def logout():
-    session.pop('email', None)
-    return redirect('/login')
+@app.route('/signup')
+def signip():
+   
+    return render_template('signup.html')
 
 
 # Run app
@@ -86,7 +86,6 @@ if __name__ == '__main__':
     # [END gae_python3_render_template]
     # [END gae_python38_render_template]
     # app.run(host='0.0.0.0', port=8080, debug=True)
-    
-    app.run(debug=True)
+   
 
 
