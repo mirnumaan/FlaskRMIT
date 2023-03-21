@@ -57,6 +57,6 @@ if __name__ == '__main__':
                             aws_secret_access_key=secret_key,
                             aws_session_token = aws_session_token,
                             region_name=region_name)
+    
     mov = Movies(dyn_resource=dynamodb)
     mov.create_table('music_code')
-    
