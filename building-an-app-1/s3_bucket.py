@@ -31,7 +31,7 @@ def create_bucket(bucket_name, region=None):
             
             s3_client.create_bucket(Bucket=bucket_name)
     except ClientError as e:
-        logging.error(e)
+        logging.error("Error: ", e)
         return False
     return True
 
