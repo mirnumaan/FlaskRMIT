@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request, redirect, session
+# from flask import Flask,render_template, request, redirect, session
 import boto3
 import logging
 from botocore.exceptions import ClientError 
@@ -45,9 +45,9 @@ class Movies:
 
 if __name__ == '__main__':
     # AWS Credentials
-    access_key="ASIAR44X363U5N2K53VF"
-    secret_key="QTFe3YejAiB+3IKtASnsbCWW2LRJ6szMV1HPOOhC"
-    aws_session_token="FwoGZXIvYXdzEM///////////wEaDM+dqQAQc/h3MhlPHyLNAVz0nCbwldv+O7MuhzKMubVA470+ttrGLmfKhBPay2drmZH5bEijT0yGL/zslPKtLYV0ICgsQwVa5FtMxlKjlVZRyUS0V3y5ELJz3LsAvq8IpC+APSUFzXbYs7GPlaevBwhVb7Th1EN/DRjV5o7cvTED7/q64x6mkpWM2jSkBt1rZ++Qv5vB/R8ESl0/A5kPiFnHshyKx3P5npv9Tt/JnrSYj3V2Wt+4kUr9Sj11pImmQFnpNyl6zLrdVLWwhWcSrndL3YXKy8sWy2XNvp4okYzloAYyLRSQ6eawzuS6zqveuxBBC4ZIH8zvtojV7RSddcYTaj97jOyKFI6/RfN49JSlew=="
+    access_key="ASIAR44X363U7GP2W6MF"
+    secret_key="H//ASuVFAF7dCWneTWYTHqgLbQ+YkHWb8CgA/75c"   
+    aws_session_token="FwoGZXIvYXdzEOD//////////wEaDACcm2AmwJfjDGNsCCLNAUftifEzGGZZCBOOXm153gojkQ8bV/wOpS32PwHv2H6/9mixmYSSjFZyqft1AhDav5nLsvgzT6MdmDPI9sWB4Z5VS3q9ztabbXgeH6XnGN/GbyWB7yaVwQjyBRGgyn0uNnP1me7Y7Rti89EX5ZvDLLROkIUuh1qocJVqn+r3mCGU7bgSX68xsbW6O6fB+ZyFgIF0RMnQbcn5a/JI3yMAcv4w9Z9KUNypSXS6NRwbEJpdk0yaKVPhuRyOlmw2RJKvVaOc5rA5xc185YGFzZsoguDooAYyLc+KRKs8NrVg6X5jo4i+VzvT0xNWH87+pQUxvqVluzxbSNTL9VJPSLN9fzcbLw=="
     region_name = 'us-east-1'
     
 
@@ -60,3 +60,4 @@ if __name__ == '__main__':
     
     mov = Movies(dyn_resource=dynamodb)
     mov.create_table('hello_world')
+    
