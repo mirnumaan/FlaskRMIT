@@ -45,8 +45,12 @@ def authenticate():
         if 'Item' in response: 
             if response['Item']['password '] == password:
                 session['email'] = email
-                print("Hi from if!!")
+                
                 return redirect('/welcome')
+            else:
+                print("Hi from else")
+                return redirect('/login')
+
 
         else:
             print("Hi from else")
