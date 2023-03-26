@@ -48,7 +48,7 @@ def authenticate():
                 
                 return redirect('/welcome')
             else:
-                print("Hi from else")
+                
                 return redirect('/login')
 
 
