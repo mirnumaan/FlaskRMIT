@@ -71,11 +71,13 @@ def register():
         
 
         # check if email already exists in DynamoDB table
-        # response = table.get_item(Key={'email': email})
-        # if 'Item' in response:
-        #     return 'Email already exists'
+        response = table.get_item(Key={'email': email})
+        if 'Item' in response:
+            return 'Email already exists'
         # add new user to DynamoDB table
-        table.put_item(
+        else:
+            print("numaan")
+            table.put_item(
             Item={
                 'email': email,
                 'user_name': user_name,
