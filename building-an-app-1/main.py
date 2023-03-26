@@ -1,16 +1,14 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session,url_for,flash
 import boto3
-# import logging
-# from table import Movies
+from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError 
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
-
 # AWS Credentials
-access_key="ASIAR44X363U7GP2W6MF"
-secret_key="H//ASuVFAF7dCWneTWYTHqgLbQ+YkHWb8CgA/75c"   
-aws_session_token="FwoGZXIvYXdzEOD//////////wEaDACcm2AmwJfjDGNsCCLNAUftifEzGGZZCBOOXm153gojkQ8bV/wOpS32PwHv2H6/9mixmYSSjFZyqft1AhDav5nLsvgzT6MdmDPI9sWB4Z5VS3q9ztabbXgeH6XnGN/GbyWB7yaVwQjyBRGgyn0uNnP1me7Y7Rti89EX5ZvDLLROkIUuh1qocJVqn+r3mCGU7bgSX68xsbW6O6fB+ZyFgIF0RMnQbcn5a/JI3yMAcv4w9Z9KUNypSXS6NRwbEJpdk0yaKVPhuRyOlmw2RJKvVaOc5rA5xc185YGFzZsoguDooAYyLc+KRKs8NrVg6X5jo4i+VzvT0xNWH87+pQUxvqVluzxbSNTL9VJPSLN9fzcbLw=="
+access_key="ASIAR44X363U356AVKEJ"
+secret_key="D2L7XgO9YvodVhjd8NewHD1eFC4Kqnw4/54VHq4H"   
+aws_session_token="FwoGZXIvYXdzEEEaDIWEJyMGoZPaut7C0CLNAU/JP37Uo31YjmMARysmQ9rSdwllN9oV+HGJ0CXKUyZf8gjDatfxxQVACbHow6/uvU4kL5pDwwGe/F93gxsuBsLpouC2q5YvWo/ssgHASJZsBIi7uYeedUE13h98XgxBiB9F4t2tjlhVaQ7NlCzMTdEMcd4xVb9ApuLrHW7NnpUfRn/KfWBLlYpjrDDXzsy5OBJ3mfaKlsjEfz3VfDm4YxjFX5CVnXqwUxJw5uDplpsare2XmqwAbFP6GvLIDGYKDUu4PC2fMEVb8H+1TMMokYb+oAYyLRTXgIQ9ZAo6llVeGlZZLk3hmZDAKT7Z7HD+vZ1WODnhPe1gWIZJoG5yfcGvcA=="
 region_name = 'us-east-1'
 table_name = 'login'
 
@@ -35,50 +33,64 @@ def login():
 def authenticate():
     email = request.form['email']
     password = request.form['password']
-
-    # DynamoDB Table
+    # DynamoDB Table is been checked here
     table = dynamodb.Table(table_name)
 
     try:
-        # Retrieve user data from DynamoDB
+        # Retrieving the data of the user data from DynamoDB
         response = table.get_item(Key={'email': email})
-        if 'Item' in response: 
+        if 'Item' in response:
+            username = response['Item'] 
             if response['Item']['password '] == password:
                 session['email'] = email
-                
+                session['user_name'] = username['user_name']
                 return redirect('/welcome')
             else:
-                
                 return redirect('/login')
-
-
         else:
-            print("Hi from else")
             return redirect('/login')
 
     except Exception as e:
-        print("Exception: ", e)
         return redirect('/login')
 
 # Dashboard route
 @app.route('/welcome')
 def dashboard():
-    print(session)
+    return render_template('welcome.html', user_name=session['user_name'])
     
-    return render_template('welcome.html')
     
 
 # Logout route
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    table = dynamodb.Table(table_name)
+    if request.method == 'POST':
+        email = request.form['email']
+        user_name = request.form['user_name']
+        password = request.form['password']
+        
+
+        # check if email already exists in DynamoDB table
+        response = table.get_item(Key={'email': email})
+        if 'Item' in response:
+            return 'Email already exists'
+        # add new user to DynamoDB table
+        table.put_item(
+            Item={
+                'email': email,
+                'user_name': user_name,
+                'password ': password
+            })
+        return redirect('/login')
+    return render_template('signup.html')
+
+@app.route("/logout")
 def logout():
-    # session.pop('email', None)
-    return render_template('/signup.html')
-
-
+    return redirect(url_for('login'))
 
 
 # Run app
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0' ,port ='8080' , debug=True)
+    app.run(host = '0.0.0.0' ,port ='80' , debug=True)
     
   

@@ -4,6 +4,12 @@
     <title>Finally you are logged in to ur music website</title>
   </head>
   <body>
+    <h1>Welcome, {{user_name}} </h1>
+    
     <h1>Here are the names of the music ppl u have subscribed</h1>
+    <form action="{{url_for('logout')}}">
+      <input type="submit" value="Logout" />
+    </form>
   </body>
 </html>
+

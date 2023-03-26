@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sign Up</title>
-	<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Signup</title>
 </head>
 <body>
-	<div class="signup-container">
-		<h1>Sign Up</h1>
-		{% if error %}
-		<p class="error">{{ error }}</p>
-		{% endif %}
-		<form action="/signup" method="POST">
-			<label for="email">Email:</label>
-			<input type="email" id="email" name="email" required>
+    <h1>Signup</h1>
+    <form method="POST" action="/signup">
+        <!-- In this section we will be entring the email  -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <!-- in this ection  -->
+        <label for="user_name">User_name:</label>
+        <input type="text" id="user_name" name="user_name" required><br>
 
-			<label for="password">Password:</label>
-			<input type="password" id="password" name="password" required>
-			<input type="submit" value="Sign Up">
-		</form>
-		<p>Already have an account? <a href="/login">Login</a></p>
-	</div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Signup">
+    </form>
 </body>
 </html>
