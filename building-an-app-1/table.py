@@ -1,9 +1,10 @@
 # from flask import Flask,render_template, request, redirect, session
 import boto3
+import json
 import logging
 from botocore.exceptions import ClientError 
 
-class Movies:
+class Music:
     """Encapsulates an Amazon DynamoDB table of movie data."""
     def __init__(self, dyn_resource):
         """
@@ -25,12 +26,14 @@ class Movies:
             self.table = self.dyn_resource.create_table(
                 TableName=table_name,
                 KeySchema=[
-                    {'AttributeName': 'year', 'KeyType': 'HASH'},  # Partition key
-                    {'AttributeName': 'title', 'KeyType': 'RANGE'}  # Sort key
+                    {'AttributeName': 'title', 'KeyType': 'HASH'}  # Partition key
+                  # Sort key
+                    
                 ],
                 AttributeDefinitions=[
-                    {'AttributeName': 'year', 'AttributeType': 'N'},
                     {'AttributeName': 'title', 'AttributeType': 'S'}
+                    
+                    
                 ],
                 ProvisionedThroughput={'ReadCapacityUnits': 10, 'WriteCapacityUnits': 10})
             self.table.wait_until_exists()
@@ -41,15 +44,15 @@ class Movies:
             raise
         else:
             return self.table
+        
 
 
 if __name__ == '__main__':
     # AWS Credentials
-    access_key="ASIAR44X363U7GP2W6MF"
-    secret_key="H//ASuVFAF7dCWneTWYTHqgLbQ+YkHWb8CgA/75c"   
-    aws_session_token="FwoGZXIvYXdzEOD//////////wEaDACcm2AmwJfjDGNsCCLNAUftifEzGGZZCBOOXm153gojkQ8bV/wOpS32PwHv2H6/9mixmYSSjFZyqft1AhDav5nLsvgzT6MdmDPI9sWB4Z5VS3q9ztabbXgeH6XnGN/GbyWB7yaVwQjyBRGgyn0uNnP1me7Y7Rti89EX5ZvDLLROkIUuh1qocJVqn+r3mCGU7bgSX68xsbW6O6fB+ZyFgIF0RMnQbcn5a/JI3yMAcv4w9Z9KUNypSXS6NRwbEJpdk0yaKVPhuRyOlmw2RJKvVaOc5rA5xc185YGFzZsoguDooAYyLc+KRKs8NrVg6X5jo4i+VzvT0xNWH87+pQUxvqVluzxbSNTL9VJPSLN9fzcbLw=="
+    access_key="ASIAR44X363UVPZBBTGD"
+    secret_key="o/B3mFs0RRc7nydos/XED7vBn0sE4VxLj6NrX2K/"   
+    aws_session_token="FwoGZXIvYXdzEF8aDNHO3qF+F6//hxD5/yLNAeCiIawRpxf8B5eeaygSQd8VV7A5Cobo+9Cb/hWvJYT1uefDLlr41gKjPVInl3ULF0w7RvTgksJc2K9lxX/DSV6bXazpTy6Cbzp3W/89lLl22wJvvZpmZjRP6vhQmELDaQeKExrKHcg5lHy16tgepsALTAkL32bHQL86fN4gWaH4xC1jRcThCMpO6kFkrbefu1a/CD6V7dj4ADdOu/dtqus1dUHwC0uJT+QzNzMOt4lNalATEdAPjzcgEVdO49yw0hEmbJJP4ZLTcGT7gncoqeKEoQYyLcI9IuFMHtUrB91QoJ0tJ/P5ITG9UabjTgqcAsd84IUYHNqEPyUvWnBTlOjYrg=="
     region_name = 'us-east-1'
-    
 
     # DynamoDB Client
     dynamodb = boto3.resource('dynamodb',
@@ -57,7 +60,10 @@ if __name__ == '__main__':
                             aws_secret_access_key=secret_key,
                             aws_session_token = aws_session_token,
                             region_name=region_name)
+
     
-    mov = Movies(dyn_resource=dynamodb)
-    mov.create_table('hello_world')
+    m = Music(dyn_resource=dynamodb)
+    m.create_table('music223')
+
+
     
