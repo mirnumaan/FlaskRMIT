@@ -27,7 +27,7 @@ class Music:
                 TableName=table_name,
                 KeySchema=[
                     {'AttributeName': 'title', 'KeyType': 'HASH'}  # Partition key
-                  # Sort key
+                 
                     
                 ],
                 AttributeDefinitions=[
@@ -49,9 +49,9 @@ class Music:
 
 if __name__ == '__main__':
     # AWS Credentials
-    access_key="ASIAR44X363UVPZBBTGD"
-    secret_key="o/B3mFs0RRc7nydos/XED7vBn0sE4VxLj6NrX2K/"   
-    aws_session_token="FwoGZXIvYXdzEF8aDNHO3qF+F6//hxD5/yLNAeCiIawRpxf8B5eeaygSQd8VV7A5Cobo+9Cb/hWvJYT1uefDLlr41gKjPVInl3ULF0w7RvTgksJc2K9lxX/DSV6bXazpTy6Cbzp3W/89lLl22wJvvZpmZjRP6vhQmELDaQeKExrKHcg5lHy16tgepsALTAkL32bHQL86fN4gWaH4xC1jRcThCMpO6kFkrbefu1a/CD6V7dj4ADdOu/dtqus1dUHwC0uJT+QzNzMOt4lNalATEdAPjzcgEVdO49yw0hEmbJJP4ZLTcGT7gncoqeKEoQYyLcI9IuFMHtUrB91QoJ0tJ/P5ITG9UabjTgqcAsd84IUYHNqEPyUvWnBTlOjYrg=="
+    access_key="ASIAR44X363USCC7RX76"
+    secret_key="PddRScFV5nlhFO6FWwYnc5xo9ysBcwymMhltpQ9O"   
+    aws_session_token="FwoGZXIvYXdzEKP//////////wEaDB4MrriF19djoauXoiLNAf4zbreTjcZYyPyxrln3y4w0OT5lsN+dguZlTEAvXgN3go/3DOcUlwOpKlippEkl/JhWqV4gWnaRay+ke6sXgwGY7CzLKltxCpuO+n0OUEALsUYz1tOmdsxPsQQPXsVV9M1TRvFtAnCXHvCrEouyj+1dn0ReyCGjRHj3S9ebBJOp6ftFGZZ4+Ly9+bQrsAZFZwYKxNdd+yyYMHLUVnyfmWIdTAaWr16ncCbPqM3YXeTR4PqRA2fx+sDb8LcDn2DZgyIhKz0ijWvnVpc7rCIoudmToQYyLSQDs9M5HmUeKuDtZV69ln/OYqIYt8yTPyoyHqPtgKGXAXtZDcfua3uVeopsIg=="    
     region_name = 'us-east-1'
 
     # DynamoDB Client
@@ -63,7 +63,10 @@ if __name__ == '__main__':
 
     
     m = Music(dyn_resource=dynamodb)
-    m.create_table('music223')
+    tab = ['numaan0', 'numaan1', 'numaan2', 'numaan3', 'numaan4', 'numaan5', 'numaan6', 'numaan7', 'numaan8', 'numaan9', 'music']
+    for x in tab:
+        print(x)
+        m.create_table(x)
 
 
     

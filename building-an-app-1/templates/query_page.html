@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Query Page</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<form action="{{url_for('dashboard')}}">
+		<input type="submit" value="Retrun to Dashboard" />
+	  </form>
+	<h1>Search for Music</h1>
+	<form action="/search" method="POST">
+		<label for="title">Title:</label>
+		<input type="text" id="title" name="title"><br><br>
+
+		<label for="year">Year:</label>
+		<input type="text" id="year" name="year"><br><br>
+
+		<label for="artist">Artist:</label>
+		<input type="text" id="artist" name="artist"><br><br>
+
+		<input type="submit" value="Search">
+	</form><br><br><br><br>
+	<table>
+		<thead>
+		  <tr>
+			<th>Title</th>
+			<th>Artist</th>
+			<th>Year</th>
+			<th>Image</th>
+			
+			<th>Subscribe</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  {% for music in music_data %}
+		  <tr>
+			<td>{{ music.title.S }}</td>
+			<td>{{ music.artist.S }}</td>
+			<td>{{ music.year.S }}</td>
+			<td><img src="data:image/jpg;base64 ,{{img_data[music['title']['S']+'.jpg'] }}" alt="None"></td>
+			
+			<td><form action="/subscribe_music" method="POST"><input name = "mf" type = "submit" value="{{ music.title .S}}" id="{{ music.title.S }}" style="
+			  background-color: #333;
+			  border: none;
+			  color: #fff;
+			  cursor: pointer;
+			  font-size: 0px; padding: 5px 10px;"></form></td>
+		  </tr> 
+		  {% endfor %}
+		</tbody>
+	  </table>
+</body>
+</html>

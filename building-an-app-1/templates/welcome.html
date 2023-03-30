@@ -1,15 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <title>Finally you are logged in to ur music website</title>
+    <title>My Subscriptions</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>Welcome, {{user_name}} </h1>
-    
-    <h1>Here are the names of the music ppl u have subscribed</h1>
+    <h2>Welcome, {{ session['user_name'] }}!</h2>
     <form action="{{url_for('logout')}}">
       <input type="submit" value="Logout" />
     </form>
+    <form action="{{url_for('query_pg')}}">
+      <input type="submit" value="Query" />
+    </form>
+    <h3>Your Subscriptions:</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Artist</th>
+          <th>Year</th>
+          <th>Image</th>
+          
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for music in music_data %}
+        <tr>
+          <td>{{ music.title }}</td>
+          <td>{{ music.artist }}</td>
+          <td>{{ music.year }}</td>
+          <td><img src="data:image/jpg;base64 ,{{img_data[music['title']+'.jpg'] }}" alt="{{img_data[music['title']+'.jpg']}}"></td>
+          <!-- <td><img src="data:image/jpg;base64  ,{{ img_data[music['title']+'.jpg'] }}" width="100" height="100"></td> -->
+
+          <td><form action="/delete_music" method="POST"><input name = "mf" type = "submit" value="{{ music.title }}" id="{{ music.title }}" style="
+            background-color: #333;
+            border: none;
+            color: #fff;
+            cursor  : pointer;
+            font-size: 0px; padding: 5px 10px;"></form></td>
+        </tr> 
+        {% endfor %}
+      </tbody>
+    </table>
   </body>
 </html>
 
