@@ -44,7 +44,7 @@ def root():
 # Login route
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    return render_template('login.html', x='none')
 
 # Authenticate route
 @app.route('/authenticate', methods=['POST'])
@@ -54,8 +54,6 @@ def authenticate():
     # DynamoDB Table is been checked here
     table = dynamodb.Table(table_name)
     print(email, password)  
-
-   
     # Retrieving the data of the user data from DynamoDB
     endpoint_url = "https://6ftlhwtbt8.execute-api.us-east-1.amazonaws.com/LoginFunction"
     payload = {"email":email}
@@ -71,7 +69,7 @@ def authenticate():
     else:
         print("Error??")
         error = 'Invalid username or password'
-        return redirect('/login', error = error)
+        return render_template('login.html', x='block')
  
 
 @app.route('/delete_music', methods=['POST'])
@@ -96,14 +94,11 @@ def dashboard():
     end_url = "https://1l68j6tkoa.execute-api.us-east-1.amazonaws.com/develop/music"
     resp = requests.post(end_url, json=payload) 
     
-    print(resp.text)
     music_data = resp.text
     music_data = json.loads(music_data)
-    print(music_data)
+    
     img_data = images_extr.img_extract()
 
-    print(music_data)
-    print(music_data[0]['title']+".jpg")
     return render_template('welcome.html', music_data=music_data,img_data=img_data)
     
 # Logout route
@@ -187,18 +182,21 @@ def query():
     if year == "":
         year = None
     music_data = query_id.search_music(title,artist,year)
-    if music_data==None:
-        return redirect('/query')
+    print("music_data: ", music_data)
+    if music_data['Count']==0:
+        print("nope i AM here")
+        return render_template("query_page.html", x='block')
     if "Items" in music_data:
         music_data=music_data["Items"]
         images_data = images_extr.img_extract()
-        return render_template('query_page.html', music_data=music_data, img_data=images_data, str=str)
+        return render_template('query_page.html', music_data=music_data, img_data=images_data, str=str, x='none')
     else:
-        return redirect('/query')
+        print("here")
+        return render_template("query_page.html", x='block')
 
 @app.route("/query")
 def query_pg():
-    return render_template("query_page.html")
+    return render_template("query_page.html", x= 'none')
 
 @app.route("/subscribe_music", methods=['POST'])
 def sub_mus():
