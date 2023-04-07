@@ -146,22 +146,31 @@ def register():
             region_name = 'us-east-1'
 
             # DynamoDB Client
-            dynamodb = boto3.resource('dynamodb',
-                                    aws_access_key_id=access_key,
-                                    aws_secret_access_key=secret_key,
-                                    aws_session_token = aws_session_token,
-                                    region_name=region_name)
-            m = Music(dyn_resource=dynamodb)
-            m.create_table(user_name)
 
-            dynamodb = boto3.client('dynamodb',
-                          aws_access_key_id=access_key,
-                          aws_secret_access_key=secret_key,
-                          aws_session_token = aws_session_token,
-                          region_name=region_name)
-            
-            music_db = MusicDatabase(dynamodb,user_name)
-            music_db.add_music_from_json('a1.json')
+            try :
+                dynamodb = boto3.resource('dynamodb',
+                                        aws_access_key_id=access_key,
+                                        aws_secret_access_key=secret_key,
+                                        aws_session_token = aws_session_token,
+                                        region_name=region_name)
+                m = Music(dyn_resource=dynamodb)
+                
+                m.create_table(user_name)
+                
+                
+                dynamodb = boto3.client('dynamodb',
+                                aws_access_key_id=access_key,
+                                aws_secret_access_key=secret_key,
+                                aws_session_token = aws_session_token,
+                                region_name=region_name)
+                
+                music_db = MusicDatabase(dynamodb,user_name)
+                music_db.add_music_from_json('a1.json')
+
+            except Exception as e:
+
+                print('e')
+
 
 
 
