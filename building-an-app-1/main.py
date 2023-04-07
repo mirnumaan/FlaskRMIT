@@ -67,9 +67,10 @@ def authenticate():
         print(password)
         return redirect('/welcome')
     else:
-        print("Error??")
+        
         error = 'Invalid username or password'
-        return render_template('login.html', x='block')
+        print('error')
+        return render_template('login.html', x='block',error= error)
  
 
 @app.route('/delete_music', methods=['POST'])
@@ -184,19 +185,20 @@ def query():
     music_data = query_id.search_music(title,artist,year)
     print("music_data: ", music_data)
     if music_data['Count']==0:
-        print("nope i AM here")
-        return render_template("query_page.html", x='block')
+        error = 'Invalid details'
+        return render_template("query_page.html", error = error)
     if "Items" in music_data:
         music_data=music_data["Items"]
         images_data = images_extr.img_extract()
-        return render_template('query_page.html', music_data=music_data, img_data=images_data, str=str, x='none')
+        
+        return render_template('query_page.html', music_data=music_data, img_data=images_data, str=str)
     else:
-        print("here")
-        return render_template("query_page.html", x='block')
+        
+        return render_template("query_page.html",error=error)
 
 @app.route("/query")
 def query_pg():
-    return render_template("query_page.html", x= 'none')
+    return render_template("query_page.html")
 
 @app.route("/subscribe_music", methods=['POST'])
 def sub_mus():
