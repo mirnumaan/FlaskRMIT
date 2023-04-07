@@ -6,16 +6,23 @@ import images_extr
 import del_music
 import query_id
 from table import Music
-from upload_table import MovieDatabase
+from upload_table import MusicDatabase
 import submus
+import json
+import requests
+import base64
+import requests
+import json
+
 # from dashboard_acess import dat
 # import dashboard_acess
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 # AWS Credentials
-access_key="ASIAR44X363UZTA4ZM5O"
-secret_key="SRIwwegDfpm+ZWtXGWISyMHzLXxr1sj3CclfVFcE"   
-aws_session_token="FwoGZXIvYXdzEDIaDH1274xTvgiQC6v4KiLNAchX+sWnwsr5/RkSyrFk67RUqeIOOu/Mcjm64Hii4ypM5rasc5iZc1IHUacz9huoWKPEzSN0Iz5S3AHaumGbBgWiVPtzV2O1A7Lv3bjCxH+qEPcYzGFEFbcO1uoXb18/Dr5RMQfRqazjZdHTTThdUZPZodhp4BlpVg+sUEI3dlH7jgXv9BDXkgWOD52dW7F92AY46JLwz++ZkCREMAnrTqCbivfU8isw5uUTeEOnJ/QgDLsm2K/lmT6v5na8EezyRCUPnDD+p2/8yVXxeDgogP+yoQYyLfC2aHg8N07nNkZ9diJR4jvK36OZYrWfmPZUoraeYDb+/FK6N0kKS1cEEZzCeA=="    
+access_key="ASIAR44X363UW6OAES2O"
+secret_key="KYf2o2r3j321+gwqyG2HgWu/AdtEr6iQwuBJrLo/"   
+aws_session_token="FwoGZXIvYXdzEGMaDBKtq1gDMQHkXTUSHyLNAXjJD0OMzfVUJe/yngJkjahyk0MANEaRGaPW52wqZHhYaqMFwvoS1eZj3LJi0dlcdVwK83COHVqiAUPW6c1VAzQGn76DO9vADb8xHynU+/wYyWPsjzFqT/4mzzYLypcTTtjjt14Yhmza0ovpfrnsrZTUTKIup43Vwfx75qHKX5MOXQtwO4Rq+NyPbK1gKMagqPbLBLzIeZjb8O+IcmGj3uKF8/P8p29wgBbxip2dKcVcFz37iIZ7hz60dRPjJeetKai9etrWnC6vK3eOdQko6++9oQYyLb/fBb86xK5/uojOKddlSrh3zWAAZPtdEs5cV5c3OdFtYwdNKtpGAOCYYepqUA=="
+
 region_name = 'us-east-1'
 table_name = 'login'
 my_bucket = 'halayolay006'
@@ -48,27 +55,24 @@ def authenticate():
     table = dynamodb.Table(table_name)
     print(email, password)  
 
-    try:
-        # Retrieving the data of the user data from DynamoDB
-        response = table.get_item(Key={'email': email})
-        print(response)
-        if 'Item' in response:
-            username = response['Item'] 
-            if response['Item']['password '] == password:
-                session['email'] = email
-                session['user_name'] = username['user_name']
-                print(password)
-                return redirect('/welcome')
-            else:
-                print("Error??")
-                error = 'Invalid username or password'
-                return redirect('/login', error = error)
-        else:
-            return redirect('/login')
-
-    except Exception as e:
-        print(e)
-        return redirect('/login')
+   
+    # Retrieving the data of the user data from DynamoDB
+    endpoint_url = "https://6ftlhwtbt8.execute-api.us-east-1.amazonaws.com/LoginFunction"
+    payload = {"email":email}
+    response=requests.post(endpoint_url,json=payload)
+    print(response)
+    response = json.loads(response.text)
+    username = response
+    if response['password '] == password:
+        session['email'] = email
+        session['user_name'] = username['user_name']
+        print(password)
+        return redirect('/welcome')
+    else:
+        print("Error??")
+        error = 'Invalid username or password'
+        return redirect('/login', error = error)
+ 
 
 @app.route('/delete_music', methods=['POST'])
 def delmu():
@@ -85,19 +89,30 @@ def dashboard():
         
         # Get the music data from DynamoDB
     tn = session['user_name']
-    music_table = dynamodb.Table(tn)
-    music_data = music_table.scan()['Items']
+    print(tn)
+    payload = {
+        "table_name": tn
+        }
+    end_url = "https://1l68j6tkoa.execute-api.us-east-1.amazonaws.com/develop/music"
+    resp = requests.post(end_url, json=payload) 
+    
+    print(resp.text)
+    music_data = resp.text
+    music_data = json.loads(music_data)
+    print(music_data)
     img_data = images_extr.img_extract()
+
+    print(music_data)
     print(music_data[0]['title']+".jpg")
-    print(img_data[music_data[0]['title']+".jpg"])
     return render_template('welcome.html', music_data=music_data,img_data=img_data)
     
 # Logout route
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
-    access_key="ASIAR44X363UZTA4ZM5O"
-    secret_key="SRIwwegDfpm+ZWtXGWISyMHzLXxr1sj3CclfVFcE"   
-    aws_session_token="FwoGZXIvYXdzEDIaDH1274xTvgiQC6v4KiLNAchX+sWnwsr5/RkSyrFk67RUqeIOOu/Mcjm64Hii4ypM5rasc5iZc1IHUacz9huoWKPEzSN0Iz5S3AHaumGbBgWiVPtzV2O1A7Lv3bjCxH+qEPcYzGFEFbcO1uoXb18/Dr5RMQfRqazjZdHTTThdUZPZodhp4BlpVg+sUEI3dlH7jgXv9BDXkgWOD52dW7F92AY46JLwz++ZkCREMAnrTqCbivfU8isw5uUTeEOnJ/QgDLsm2K/lmT6v5na8EezyRCUPnDD+p2/8yVXxeDgogP+yoQYyLfC2aHg8N07nNkZ9diJR4jvK36OZYrWfmPZUoraeYDb+/FK6N0kKS1cEEZzCeA=="    
+    access_key="ASIAR44X363UW6OAES2O"
+    secret_key="KYf2o2r3j321+gwqyG2HgWu/AdtEr6iQwuBJrLo/"   
+    aws_session_token="FwoGZXIvYXdzEGMaDBKtq1gDMQHkXTUSHyLNAXjJD0OMzfVUJe/yngJkjahyk0MANEaRGaPW52wqZHhYaqMFwvoS1eZj3LJi0dlcdVwK83COHVqiAUPW6c1VAzQGn76DO9vADb8xHynU+/wYyWPsjzFqT/4mzzYLypcTTtjjt14Yhmza0ovpfrnsrZTUTKIup43Vwfx75qHKX5MOXQtwO4Rq+NyPbK1gKMagqPbLBLzIeZjb8O+IcmGj3uKF8/P8p29wgBbxip2dKcVcFz37iIZ7hz60dRPjJeetKai9etrWnC6vK3eOdQko6++9oQYyLb/fBb86xK5/uojOKddlSrh3zWAAZPtdEs5cV5c3OdFtYwdNKtpGAOCYYepqUA=="
+
     region_name = 'us-east-1'
     dynamodb = boto3.resource('dynamodb',
                           aws_access_key_id=access_key,
@@ -106,7 +121,7 @@ def register():
                           region_name=region_name)
 
     table =dynamodb.Table(table_name)
-    # table = table_name
+    
     if request.method == 'POST':
         email = request.form['email']
         user_name = request.form['user_name']
@@ -125,9 +140,10 @@ def register():
                 'user_name': user_name,
                 'password ': password
             })
-            access_key="ASIAR44X363UZTA4ZM5O"
-            secret_key="SRIwwegDfpm+ZWtXGWISyMHzLXxr1sj3CclfVFcE"   
-            aws_session_token="FwoGZXIvYXdzEDIaDH1274xTvgiQC6v4KiLNAchX+sWnwsr5/RkSyrFk67RUqeIOOu/Mcjm64Hii4ypM5rasc5iZc1IHUacz9huoWKPEzSN0Iz5S3AHaumGbBgWiVPtzV2O1A7Lv3bjCxH+qEPcYzGFEFbcO1uoXb18/Dr5RMQfRqazjZdHTTThdUZPZodhp4BlpVg+sUEI3dlH7jgXv9BDXkgWOD52dW7F92AY46JLwz++ZkCREMAnrTqCbivfU8isw5uUTeEOnJ/QgDLsm2K/lmT6v5na8EezyRCUPnDD+p2/8yVXxeDgogP+yoQYyLfC2aHg8N07nNkZ9diJR4jvK36OZYrWfmPZUoraeYDb+/FK6N0kKS1cEEZzCeA=="    
+            access_key="ASIAR44X363UW6OAES2O"
+            secret_key="KYf2o2r3j321+gwqyG2HgWu/AdtEr6iQwuBJrLo/"   
+            aws_session_token="FwoGZXIvYXdzEGMaDBKtq1gDMQHkXTUSHyLNAXjJD0OMzfVUJe/yngJkjahyk0MANEaRGaPW52wqZHhYaqMFwvoS1eZj3LJi0dlcdVwK83COHVqiAUPW6c1VAzQGn76DO9vADb8xHynU+/wYyWPsjzFqT/4mzzYLypcTTtjjt14Yhmza0ovpfrnsrZTUTKIup43Vwfx75qHKX5MOXQtwO4Rq+NyPbK1gKMagqPbLBLzIeZjb8O+IcmGj3uKF8/P8p29wgBbxip2dKcVcFz37iIZ7hz60dRPjJeetKai9etrWnC6vK3eOdQko6++9oQYyLb/fBb86xK5/uojOKddlSrh3zWAAZPtdEs5cV5c3OdFtYwdNKtpGAOCYYepqUA=="
+
             region_name = 'us-east-1'
 
             # DynamoDB Client
@@ -138,24 +154,27 @@ def register():
                                     region_name=region_name)
             m = Music(dyn_resource=dynamodb)
             m.create_table(user_name)
+
             dynamodb = boto3.client('dynamodb',
                           aws_access_key_id=access_key,
                           aws_secret_access_key=secret_key,
                           aws_session_token = aws_session_token,
                           region_name=region_name)
             
-            movie_db = MovieDatabase(dynamodb,user_name)
-            movie_db.add_movies_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
+            music_db = MusicDatabase(dynamodb,user_name)
+            music_db.add_music_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
 
 
 
         return redirect('/login')
     return render_template('signup.html')
-    
+
+#logout route 
 @app.route("/logout")
 def logout():
     return redirect(url_for('login'))
 
+# query page route
 @app.route("/search", methods=["POST"])
 def query():
     title = request.form['title']

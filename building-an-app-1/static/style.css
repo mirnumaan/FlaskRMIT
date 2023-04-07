@@ -42,6 +42,10 @@
   cursor: pointer;
 }
 
+
+
+
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -127,7 +131,7 @@ form {
   margin: auto;
   width: 50%;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid black;
   border-radius: 10px;
 }
 

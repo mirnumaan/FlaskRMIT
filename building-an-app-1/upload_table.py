@@ -9,12 +9,12 @@ import boto3
 
 logger = logging.getLogger(__name__)
 
-class MovieDatabase:
+class MusicDatabase:
     def __init__(self, table,tn):
         self.table = table
         self.tn = tn
     
-    def add_movie(self, title, artist, year, img_url, web_url):
+    def add_music(self, title, artist, year, img_url, web_url):
         """
         Adds a movie to the table.
         :param title: The title of the movie.
@@ -40,7 +40,7 @@ class MovieDatabase:
                 err.response['Error']['Code'], err.response['Error']['Message'])
             raise
             
-    def add_movies_from_json(self, filename):
+    def add_music_from_json(self, filename):
         """
         Adds movies to the table from a JSON file.
         :param filename: The name of the JSON file.
@@ -50,7 +50,7 @@ class MovieDatabase:
             print(songs)
             for music in songs['songs']:
                 print(music)
-                self.add_movie(
+                self.add_music(
                     title=music['title'],
                     year=music['year'],
                     artist=music['artist'],
@@ -74,8 +74,8 @@ if __name__ == '__main__':
 
     tns = ['numaan0', 'numaan1', 'numaan2', 'numaan3', 'numaan4', 'numaan5', 'numaan6', 'numaan7', 'numaan8', 'numaan9', 'music']
     for tn in tns:
-        movie_db = MovieDatabase(dynamodb,tn)
-        movie_db.add_movies_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
+        music_db = MusicDatabase(dynamodb,tn)
+        music_db.add_music_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
 
 
   
