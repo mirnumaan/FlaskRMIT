@@ -127,9 +127,11 @@ def register():
         
         # check if email already exists in DynamoDB table
         response = table.get_item(Key={'email': email})
+        
         if 'Item' in response:
             return 'Email already exists'
         # add new user to DynamoDB table
+    
         else:
             table.put_item(
             Item={
@@ -186,7 +188,7 @@ def query():
     music_data = query_id.search_music(title,artist,year)
     print("music_data: ", music_data)
     if music_data['Count']==0:
-        error = 'Invalid details'
+        error = 'No result is retrieved. Please query again'
         return render_template("query_page.html", error = error)
     if "Items" in music_data:
         music_data=music_data["Items"]
