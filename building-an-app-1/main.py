@@ -127,9 +127,11 @@ def register():
         
         # check if email already exists in DynamoDB table
         response = table.get_item(Key={'email': email})
+        
         if 'Item' in response:
             return 'Email already exists'
         # add new user to DynamoDB table
+    
         else:
             table.put_item(
             Item={
@@ -144,22 +146,31 @@ def register():
             region_name = 'us-east-1'
 
             # DynamoDB Client
-            dynamodb = boto3.resource('dynamodb',
-                                    aws_access_key_id=access_key,
-                                    aws_secret_access_key=secret_key,
-                                    aws_session_token = aws_session_token,
-                                    region_name=region_name)
-            m = Music(dyn_resource=dynamodb)
-            m.create_table(user_name)
 
-            dynamodb = boto3.client('dynamodb',
-                          aws_access_key_id=access_key,
-                          aws_secret_access_key=secret_key,
-                          aws_session_token = aws_session_token,
-                          region_name=region_name)
-            
-            music_db = MusicDatabase(dynamodb,user_name)
-            music_db.add_music_from_json('a1.json')
+            try :
+                dynamodb = boto3.resource('dynamodb',
+                                        aws_access_key_id=access_key,
+                                        aws_secret_access_key=secret_key,
+                                        aws_session_token = aws_session_token,
+                                        region_name=region_name)
+                m = Music(dyn_resource=dynamodb)
+                
+                m.create_table(user_name)
+                
+                
+                dynamodb = boto3.client('dynamodb',
+                                aws_access_key_id=access_key,
+                                aws_secret_access_key=secret_key,
+                                aws_session_token = aws_session_token,
+                                region_name=region_name)
+                
+                music_db = MusicDatabase(dynamodb,user_name)
+                music_db.add_music_from_json('a1.json')
+
+            except Exception as e:
+
+                print('e')
+
 
 
 
@@ -186,7 +197,7 @@ def query():
     music_data = query_id.search_music(title,artist,year)
     print("music_data: ", music_data)
     if music_data['Count']==0:
-        error = 'Invalid details'
+        error = 'No result is retrieved. Please query again'
         return render_template("query_page.html", error = error)
     if "Items" in music_data:
         music_data=music_data["Items"]
