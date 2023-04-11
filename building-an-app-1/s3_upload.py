@@ -17,7 +17,7 @@ s3 = boto3.client('s3',
             aws_session_token = aws_session_token,region_name=region_name)
 
 # Open JSON file containing image URLs
-with open('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json', 'r') as f:
+with open('a1.json', 'r') as f:
     data = json.load(f)
 # Loop through each item in the JSON file
 for item in data['songs']:

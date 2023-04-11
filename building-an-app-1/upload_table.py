@@ -75,7 +75,7 @@ if __name__ == '__main__':
     tns = ['numaan0', 'numaan1', 'numaan2', 'numaan3', 'numaan4', 'numaan5', 'numaan6', 'numaan7', 'numaan8', 'numaan9', 'music']
     for tn in tns:
         music_db = MusicDatabase(dynamodb,tn)
-        music_db.add_music_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
+        music_db.add_music_from_json('a1.json')
 
 
   

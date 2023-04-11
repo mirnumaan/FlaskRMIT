@@ -164,7 +164,7 @@ def register():
                                 region_name=region_name)
                 
                 music_db = MusicDatabase(dynamodb,user_name)
-                music_db.add_music_from_json('/Users/numaanbashir/Documents/cybersecurity/cloud_computing/assign1/FlaskRMIT/building-an-app-1/a1.json')
+                music_db.add_music_from_json('a1.json')
 
             except Exception as e:
 
