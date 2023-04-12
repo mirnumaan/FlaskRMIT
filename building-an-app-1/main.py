@@ -157,13 +157,13 @@ def register():
                 m.create_table(user_name)
                 
                 
-                # dynamodb = boto3.client('dynamodb',
-                #                 aws_access_key_id=access_key,
-                #                 aws_secret_access_key=secret_key,
-                #                 aws_session_token = aws_session_token,
-                #                 region_name=region_name)
+                dynamodb = boto3.client('dynamodb',
+                                aws_access_key_id=access_key,
+                                aws_secret_access_key=secret_key,
+                                aws_session_token = aws_session_token,
+                                region_name=region_name)
                 
-                # music_db = MusicDatabase(dynamodb,user_name)
+                music_db = MusicDatabase(dynamodb,user_name)
                 # music_db.add_music_from_json('a1.json')
 
             except Exception as e:
